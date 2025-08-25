@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppliers>
+    <supplier id="1">
+        <name>Wayne Enterprises</name>
+        <contact_info>wayne@batmail.com</contact_info>
+        <products>
+            <product id="101">Batmobile</product>
+            <product id="102">Batarang</product>
+        </products>
+    </supplier>
+    <supplier id="2">
+        <name>Stark Industries</name>
+        <contact_info>stark@ironmail.com</contact_info>
+        <products>
+            <product id="103">Iron Man Suit</product>
+            <product id="104">Arc Reactor</product>
+        </products>
+    </supplier>
+</suppliers>
