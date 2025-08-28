@@ -8,8 +8,9 @@ import com.solvd.online_shop.dao.impl.DiscountDao;
 import com.solvd.online_shop.dao.impl.OrderItemDao;
 import com.solvd.online_shop.dao.impl.ProductDao;
 import com.solvd.online_shop.models.Product;
+import com.solvd.online_shop.services.interfaces.IProductService;
 
-public class ProductService {
+public class ProductService  implements IProductService {
     private final ProductDao productDao;
     private final OrderItemDao orderItemDao;
     private final CartItemDao cartItemDao;
@@ -21,24 +22,24 @@ public class ProductService {
         this.cartItemDao = new CartItemDao();
         this.discountDao = new DiscountDao();
     }
-
-    public void addProduct(Product product) throws SQLException {
+    @Override
+    public void add(Product product) throws SQLException {
         productDao.add(product);
     }
-
-    public Product getProductById(int id) throws SQLException {
+    @Override
+    public Product getById(int id) throws SQLException {
         return productDao.getById(id);
     }
-
-    public List<Product> getAllProducts() throws SQLException {
+    @Override
+    public List<Product> getAll() throws SQLException {
         return productDao.getAll();
     }
-
-    public void updateProduct(Product product) throws SQLException {
+    @Override
+    public void update(Product product) throws SQLException {
         productDao.update(product);
     }
-
-    public void deleteProduct(int id) throws SQLException {
+    @Override
+    public void delete(int id) throws SQLException {
         orderItemDao.deleteOrderItemsByProductId(id);
         cartItemDao.deleteCartItemsByProductId(id);
         discountDao.deleteDiscountsByProductId(id);

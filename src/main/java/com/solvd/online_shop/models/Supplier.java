@@ -1,12 +1,31 @@
 package com.solvd.online_shop.models;
 
+import java.util.List;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlType;
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "", propOrder = {"id", "name", "contactInfo", "products"})
+@XmlRootElement(name = "supplier")
 public class Supplier {
+
     private int id;
     private String name;
+
+    @XmlElement(name = "contact_info")
     private String contactInfo;
+
+    @XmlElementWrapper(name = "products")
+    @XmlElement(name = "product")
+    private List<Product> products;
 
     public Supplier() {
     }
@@ -39,6 +58,14 @@ public class Supplier {
 
     public void setContactInfo(String contactInfo) {
         this.contactInfo = contactInfo;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
     @Override

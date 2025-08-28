@@ -7,8 +7,10 @@ import com.solvd.online_shop.dao.impl.CategoryDao;
 import com.solvd.online_shop.dao.impl.ProductDao;
 import com.solvd.online_shop.models.Category;
 import com.solvd.online_shop.models.Product;
+import com.solvd.online_shop.services.interfaces.ICategoryService;
 
-public class CategoryService {
+public class CategoryService implements ICategoryService {
+
     private final CategoryDao categoryDao;
     private final ProductDao productDao;
 
@@ -17,28 +19,33 @@ public class CategoryService {
         this.productDao = new ProductDao();
     }
 
-    public void addCategory(Category category) throws SQLException {
+    @Override
+    public void add(Category category) throws SQLException {
         categoryDao.add(category);
     }
 
-    public Category getCategoryById(int id) throws SQLException {
+    @Override
+    public Category getById(int id) throws SQLException {
         return categoryDao.getById(id);
     }
 
-    public List<Category> getAllCategories() throws SQLException {
+    @Override
+    public List<Category> getAll() throws SQLException {
         return categoryDao.getAll();
     }
 
-    public List<Product> getProductsByCategory(int categoryId) throws SQLException {
+    // @Override
+    // public List<Product> getProductsByCategory(int categoryId) throws SQLException {
+    //     return productDao.getAll();
+    // }
 
-        return productDao.getAll();
-    }
-
-    public void updateCategory(Category category) throws SQLException {
+    @Override
+    public void update(Category category) throws SQLException {
         categoryDao.update(category);
     }
 
-    public void deleteCategory(int id) throws SQLException {
+    @Override
+    public void delete(int id) throws SQLException {
         categoryDao.delete(id);
     }
 }

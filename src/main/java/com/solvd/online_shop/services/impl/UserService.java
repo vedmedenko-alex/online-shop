@@ -8,8 +8,10 @@ import com.solvd.online_shop.dao.impl.OrderDao;
 import com.solvd.online_shop.dao.impl.ReviewDao;
 import com.solvd.online_shop.dao.impl.UserDao;
 import com.solvd.online_shop.models.User;
+import com.solvd.online_shop.services.interfaces.IUserService;
 
-public class UserService {
+public class UserService implements IUserService {
+
     private final UserDao userDao;
     private final OrderDao orderDao;
     private final CartItemDao cartItemDao;
@@ -22,26 +24,31 @@ public class UserService {
         this.reviewDao = new ReviewDao();
     }
 
-    public void addUser(User user) throws SQLException {
+    @Override
+    public void add(User user) throws SQLException {
         if (userDao.getUserByEmail(user.getEmail()) != null) {
             throw new SQLException("User with email " + user.getEmail() + " already exists.");
         }
         userDao.add(user);
     }
 
-    public User getUserById(int id) throws SQLException {
+    @Override
+    public User getById(int id) throws SQLException {
         return userDao.getById(id);
     }
 
-    public List<User> getAllUsers() throws SQLException {
+    @Override
+    public List<User> getAll() throws SQLException {
         return userDao.getAll();
     }
 
-    public void updateUser(User user) throws SQLException {
+    @Override
+    public void update(User user) throws SQLException {
         userDao.update(user);
     }
 
-    public void deleteUser(int id) throws SQLException {
+    @Override
+    public void delete(int id) throws SQLException {
         orderDao.deleteOrdersByUserId(id);
         cartItemDao.deleteCartItemsByUserId(id);
         reviewDao.deleteReviewsByUserId(id);

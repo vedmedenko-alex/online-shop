@@ -3,7 +3,18 @@ package com.solvd.online_shop.models;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlType;
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "", propOrder = {
+    "productId", "categoryId", "name", "description", "price", "stockQuantity"
+})
+@XmlRootElement(name = "product")
 public class Product {
+
     private int productId;
     private int categoryId;
     private String name;

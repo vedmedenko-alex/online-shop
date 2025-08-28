@@ -4,28 +4,40 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.solvd.online_shop.dao.impl.DiscountDao;
+import com.solvd.online_shop.models.Category;
 import com.solvd.online_shop.models.Discount;
+import com.solvd.online_shop.services.interfaces.IDiscountService;
 
-public class DiscountService {
+public class DiscountService implements IDiscountService {
+
     private final DiscountDao discountDao;
 
     public DiscountService() {
         this.discountDao = new DiscountDao();
     }
 
-    public void addDiscount(Discount discount) throws SQLException {
+    @Override
+    public void add(Discount discount) throws SQLException {
         discountDao.add(discount);
     }
 
-    public List<Discount> getAllDiscounts() throws SQLException {
+    @Override
+    public List<Discount> getAll() throws SQLException {
         return discountDao.getAll();
     }
 
-    public void updateDiscount(Discount discount) throws SQLException {
+    @Override
+    public Discount getById(int id) throws SQLException {
+        return discountDao.getById(id);
+    }
+
+    @Override
+    public void update(Discount discount) throws SQLException {
         discountDao.update(discount);
     }
 
-    public void deleteDiscount(int id) throws SQLException {
+    @Override
+    public void delete(int id) throws SQLException {
         discountDao.delete(id);
     }
 }

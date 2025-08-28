@@ -7,12 +7,13 @@ import com.solvd.online_shop.dao.impl.CategoryDao;
 import com.solvd.online_shop.dao.impl.ProductDao;
 import com.solvd.online_shop.models.Category;
 import com.solvd.online_shop.models.Product;
+import com.solvd.online_shop.services.interfaces.IProductCategoryService;
 
-public class ProductCategoryService {
+public class ProductCategoryService implements IProductCategoryService{
     private final ProductDao productDao;
     private final CategoryDao categoryDao;
 
-    public ProductCategoryService() {
+    public ProductCategoryService(){
         this.productDao = new ProductDao();
         this.categoryDao = new CategoryDao();
     }

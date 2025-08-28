@@ -1,19 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppliers>
-    <supplier id="1">
+    <supplier>
+        <id>1</id>
         <name>Wayne Enterprises</name>
         <contact_info>wayne@batmail.com</contact_info>
         <products>
-            <product id="101">Batmobile</product>
-            <product id="102">Batarang</product>
+            <product>
+                <productId>101</productId>
+                <categoryId>1</categoryId>
+                <name>Batmobile</name>
+                <description>High-tech vehicle for Batman</description>
+                <price>1000000.00</price>
+                <stockQuantity>1</stockQuantity>
+            </product>
+            <product>
+                <productId>102</productId>
+                <categoryId>1</categoryId>
+                <name>Batarang</name>
+                <description>Throwing weapon shaped like a bat</description>
+                <price>500.00</price>
+                <stockQuantity>50</stockQuantity>
+            </product>
         </products>
     </supplier>
-    <supplier id="2">
+
+    <supplier>
+        <id>2</id>
         <name>Stark Industries</name>
         <contact_info>stark@ironmail.com</contact_info>
         <products>
-            <product id="103">Iron Man Suit</product>
-            <product id="104">Arc Reactor</product>
+            <product>
+                <productId>103</productId>
+                <categoryId>2</categoryId>
+                <name>Iron Man Suit</name>
+                <description>Powered exoskeleton suit</description>
+                <price>5000000.00</price>
+                <stockQuantity>5</stockQuantity>
+            </product>
+            <product>
+                <productId>104</productId>
+                <categoryId>2</categoryId>
+                <name>Arc Reactor</name>
+                <description>Clean energy source</description>
+                <price>250000.00</price>
+                <stockQuantity>10</stockQuantity>
+            </product>
         </products>
     </supplier>
 </suppliers>
