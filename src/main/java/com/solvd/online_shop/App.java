@@ -13,6 +13,7 @@ import com.solvd.online_shop.models.Review;
 import com.solvd.online_shop.models.Supplier;
 import com.solvd.online_shop.models.SuppliersWrapper;
 import com.solvd.online_shop.models.User;
+import com.solvd.online_shop.services.impl.CartService;
 import com.solvd.online_shop.services.impl.CategoryService;
 import com.solvd.online_shop.services.impl.DiscountService;
 import com.solvd.online_shop.services.impl.OrderService;
@@ -195,6 +196,7 @@ public class App {
             logger.log(Level.WARNING, "Error in DiscountService: {0}", e);
         }
 
+        // XML Service with DOM
         logger.info("---- Testing Supplierervice XML ----");
         SupplierService service = new SupplierService();
 
@@ -209,7 +211,7 @@ public class App {
             logger.warning("Supplier with ID 2 not found.");
         }
 
-        //XML Service with Xsd
+        // XML Service with Xsd
         logger.info("----  All suppliers from XML with JAXB ----");
         try {
             XmlService xmlService = new XmlService();
@@ -225,5 +227,15 @@ public class App {
         } catch (Exception e) {
             logger.log(Level.WARNING, "Error occurred while parsing XML", e);
         }
+
+        CartService cartService = new CartService();
+
+        // JSON
+        logger.info("---- All Carts from JSON ----");
+        cartService.getAllCarts().forEach(c -> logger.info(c.toString()));
+
+        logger.info("---- Items from Cart 1 ----");
+        cartService.getItemsByCartId(1).forEach(i -> logger.info(i.toString()));
+
     }
 }
