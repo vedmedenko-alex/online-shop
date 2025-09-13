@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solvd.online_shop.mybatisimpl.mappers.ReviewMapper">
+
+    <resultMap id="ReviewResultMap" type="com.solvd.online_shop.models.Review">
+        <id property="reviewId" column="review_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="rating" column="rating"/>
+        <result property="comment" column="comment"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <select id="getById" parameterType="int" resultMap="ReviewResultMap">
+        SELECT * FROM Reviews WHERE review_id = #{id}
+    </select>
+
+    <select id="getAll" resultMap="ReviewResultMap">
+        SELECT * FROM Reviews
+    </select>
+
+    <insert id="add" parameterType="com.solvd.online_shop.models.Review" useGeneratedKeys="true" keyProperty="reviewId">
+        INSERT INTO Reviews (product_id, user_id, rating, comment, created_at)
+        VALUES (#{productId}, #{userId}, #{rating}, #{comment}, #{createdAt})
+    </insert>
+
+    <update id="update" parameterType="com.solvd.online_shop.models.Review">
+        UPDATE Reviews
+        SET product_id=#{productId}, user_id=#{userId}, rating=#{rating},
+            comment=#{comment}, created_at=#{createdAt}
+        WHERE review_id=#{reviewId}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM Reviews WHERE review_id=#{id}
+    </delete>
+
+</mapper>

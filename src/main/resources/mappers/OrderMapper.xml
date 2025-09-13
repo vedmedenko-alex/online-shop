@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solvd.online_shop.mybatisimpl.mappers.OrderMapper">
+
+    <resultMap id="OrderResultMap" type="com.solvd.online_shop.models.Order">
+        <id property="orderId" column="order_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="orderDate" column="order_date"/>
+        <result property="status" column="status"/>
+        <result property="totalAmount" column="total_amount"/>
+    </resultMap>
+
+    <select id="getById" parameterType="int" resultMap="OrderResultMap">
+        SELECT * FROM Orders WHERE order_id = #{id}
+    </select>
+
+    <select id="getAll" resultMap="OrderResultMap">
+        SELECT * FROM Orders
+    </select>
+
+    <insert id="add" parameterType="com.solvd.online_shop.models.Order">
+        INSERT INTO Orders (user_id, order_date, status, total_amount)
+        VALUES (#{userId}, #{orderDate}, #{status}, #{totalAmount})
+    </insert>
+
+    <update id="update" parameterType="com.solvd.online_shop.models.Order">
+        UPDATE Orders
+        SET user_id=#{userId}, order_date=#{orderDate}, status=#{status}, total_amount=#{totalAmount}
+        WHERE order_id=#{orderId}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM Orders WHERE order_id=#{id}
+    </delete>
+
+</mapper>

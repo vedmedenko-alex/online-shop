@@ -20,7 +20,7 @@ public class DiscountDao implements IDiscountDao {
     private static final String UPDATE_DISCOUNT = "UPDATE Discounts SET product_id = ?, percentage = ?, valid_from = ?, valid_to = ? WHERE discount_id = ?";
     private static final String DELETE_DISCOUNT = "DELETE FROM Discounts WHERE discount_id = ?";
     private static final String DELETE_DISCOUNTS_BY_PRODUCT_ID = "DELETE FROM Discounts WHERE product_id = ?";
-    ConnectionPool pool = ConnectionPool.getInstance();
+    private final ConnectionPool pool = ConnectionPool.getInstance();
 
     @Override
     public void add(Discount discount) throws SQLException {
@@ -30,6 +30,8 @@ public class DiscountDao implements IDiscountDao {
             stmt.setDate(3, discount.getValidFrom());
             stmt.setDate(4, discount.getValidTo());
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
     }
 
@@ -38,15 +40,18 @@ public class DiscountDao implements IDiscountDao {
         Discount discount = null;
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(GET_DISCOUNT_BY_ID)) {
             stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                discount = new Discount(
-                        rs.getInt("discount_id"),
-                        rs.getInt("product_id"),
-                        rs.getDouble("percentage"),
-                        rs.getDate("valid_from"),
-                        rs.getDate("valid_to"));
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    discount = new Discount(
+                            rs.getInt("discount_id"),
+                            rs.getInt("product_id"),
+                            rs.getDouble("percentage"),
+                            rs.getDate("valid_from"),
+                            rs.getDate("valid_to"));
+                }
             }
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
         return discount;
     }
@@ -63,6 +68,8 @@ public class DiscountDao implements IDiscountDao {
                         rs.getDate("valid_from"),
                         rs.getDate("valid_to")));
             }
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
         return discounts;
     }
@@ -76,6 +83,8 @@ public class DiscountDao implements IDiscountDao {
             stmt.setDate(4, discount.getValidTo());
             stmt.setInt(5, discount.getDiscountId());
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
     }
 
@@ -84,6 +93,8 @@ public class DiscountDao implements IDiscountDao {
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(DELETE_DISCOUNT)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
     }
 
@@ -92,6 +103,8 @@ public class DiscountDao implements IDiscountDao {
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(DELETE_DISCOUNTS_BY_PRODUCT_ID)) {
             stmt.setInt(1, productId);
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
     }
 }

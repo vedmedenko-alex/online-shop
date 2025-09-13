@@ -13,14 +13,20 @@ import com.solvd.online_shop.models.Review;
 import com.solvd.online_shop.models.Supplier;
 import com.solvd.online_shop.models.SuppliersWrapper;
 import com.solvd.online_shop.models.User;
-import com.solvd.online_shop.services.impl.CartService;
-import com.solvd.online_shop.services.impl.CategoryService;
-import com.solvd.online_shop.services.impl.DiscountService;
-import com.solvd.online_shop.services.impl.OrderService;
-import com.solvd.online_shop.services.impl.ProductService;
-import com.solvd.online_shop.services.impl.ReviewService;
-import com.solvd.online_shop.services.impl.SupplierService;
-import com.solvd.online_shop.services.impl.UserService;
+import com.solvd.online_shop.services.impl.CartService; // used with JSON parsing
+// import com.solvd.online_shop.services.impl.CategoryService;
+// import com.solvd.online_shop.services.impl.DiscountService;
+// import com.solvd.online_shop.services.impl.OrderService;
+// import com.solvd.online_shop.services.impl.ProductService;
+// import com.solvd.online_shop.services.impl.ReviewService;
+// import com.solvd.online_shop.services.impl.SupplierService;
+import com.solvd.online_shop.services.mybatisimpl.CategoryService;
+import com.solvd.online_shop.services.mybatisimpl.DiscountService;
+import com.solvd.online_shop.services.mybatisimpl.OrderService;
+import com.solvd.online_shop.services.mybatisimpl.ProductService;
+import com.solvd.online_shop.services.mybatisimpl.ReviewService;
+import com.solvd.online_shop.services.mybatisimpl.UserService;
+import com.solvd.online_shop.services.impl.SupplierService; // used for xml parsing
 import com.solvd.online_shop.services.impl.XmlService;
 
 public class App {

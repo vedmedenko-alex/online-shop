@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solvd.online_shop.mybatisimpl.mappers.OrderItemMapper">
+
+    <resultMap id="OrderItemResultMap" type="com.solvd.online_shop.models.OrderItem">
+        <id property="orderItemId" column="order_item_id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="quantity" column="quantity"/>
+        <result property="price" column="price"/>
+    </resultMap>
+
+    <select id="getById" parameterType="int" resultMap="OrderItemResultMap">
+        SELECT * FROM OrderItems WHERE order_item_id = #{id}
+    </select>
+
+    <select id="getAll" resultMap="OrderItemResultMap">
+        SELECT * FROM OrderItems
+    </select>
+
+    <insert id="add" parameterType="com.solvd.online_shop.models.OrderItem">
+        INSERT INTO OrderItems (order_id, product_id, quantity, price)
+        VALUES (#{orderId}, #{productId}, #{quantity}, #{price})
+    </insert>
+
+    <update id="update" parameterType="com.solvd.online_shop.models.OrderItem">
+        UPDATE OrderItems
+        SET order_id=#{orderId}, product_id=#{productId}, quantity=#{quantity}, price=#{price}
+        WHERE order_item_id=#{orderItemId}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM OrderItems WHERE order_item_id=#{id}
+    </delete>
+
+</mapper>

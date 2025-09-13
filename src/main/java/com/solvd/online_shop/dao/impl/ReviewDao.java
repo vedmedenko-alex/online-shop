@@ -20,7 +20,7 @@ public class ReviewDao implements IReviewDao {
     private static final String UPDATE_REVIEW = "UPDATE Reviews SET product_id = ?, user_id = ?, rating = ?, comment = ?, created_at = ? WHERE review_id = ?";
     private static final String DELETE_REVIEW = "DELETE FROM Reviews WHERE review_id = ?";
     private static final String DELETE_REVIEWS_BY_USER_ID = "DELETE FROM Reviews WHERE user_id = ?";
-    ConnectionPool pool = ConnectionPool.getInstance();
+    private final ConnectionPool pool = ConnectionPool.getInstance();
 
     @Override
     public void add(Review review) throws SQLException {
@@ -31,6 +31,8 @@ public class ReviewDao implements IReviewDao {
             stmt.setString(4, review.getComment());
             stmt.setTimestamp(5, review.getCreatedAt());
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
     }
 
@@ -40,17 +42,20 @@ public class ReviewDao implements IReviewDao {
 
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(GET_REVIEW_BY_ID)) {
             stmt.setInt(1, reviewId);
-            ResultSet rs = stmt.executeQuery();
+            try (ResultSet rs = stmt.executeQuery()) {
 
-            if (rs.next()) {
-                review = new Review(
-                        rs.getInt("review_id"),
-                        rs.getInt("product_id"),
-                        rs.getInt("user_id"),
-                        rs.getInt("rating"),
-                        rs.getString("comment"),
-                        rs.getTimestamp("created_at"));
+                if (rs.next()) {
+                    review = new Review(
+                            rs.getInt("review_id"),
+                            rs.getInt("product_id"),
+                            rs.getInt("user_id"),
+                            rs.getInt("rating"),
+                            rs.getString("comment"),
+                            rs.getTimestamp("created_at"));
+                }
             }
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
 
         return review;
@@ -69,6 +74,8 @@ public class ReviewDao implements IReviewDao {
                         rs.getString("comment"),
                         rs.getTimestamp("created_at")));
             }
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
         return reviews;
     }
@@ -83,6 +90,8 @@ public class ReviewDao implements IReviewDao {
             stmt.setTimestamp(5, review.getCreatedAt());
             stmt.setInt(6, review.getReviewId());
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
     }
 
@@ -91,6 +100,8 @@ public class ReviewDao implements IReviewDao {
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(DELETE_REVIEW)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
     }
 
@@ -99,6 +110,8 @@ public class ReviewDao implements IReviewDao {
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(DELETE_REVIEWS_BY_USER_ID)) {
             stmt.setInt(1, userId);
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
     }
 }

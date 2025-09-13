@@ -20,7 +20,7 @@ public class OrderDao implements IOrderDao {
     private static final String UPDATE_ORDER = "UPDATE Orders SET user_id = ?, order_date = ?, status = ?, total_amount = ? WHERE order_id = ?";
     private static final String DELETE_ORDER = "DELETE FROM Orders WHERE order_id = ?";
     private static final String DELETE_ORDERS_BY_USER_ID = "DELETE FROM Orders WHERE user_id = ?";
-    ConnectionPool pool = ConnectionPool.getInstance();
+    private final ConnectionPool pool = ConnectionPool.getInstance();
 
     @Override
     public void add(Order order) throws SQLException {
@@ -30,6 +30,8 @@ public class OrderDao implements IOrderDao {
             stmt.setString(3, order.getStatus());
             stmt.setDouble(4, order.getTotalAmount());
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
     }
 
@@ -38,11 +40,14 @@ public class OrderDao implements IOrderDao {
         Order order = null;
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(GET_ORDER_BY_ID)) {
             stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                order = new Order(rs.getInt("order_id"), rs.getInt("user_id"), rs.getString("order_date"),
-                        rs.getString("status"), rs.getDouble("total_amount"));
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    order = new Order(rs.getInt("order_id"), rs.getInt("user_id"), rs.getString("order_date"),
+                            rs.getString("status"), rs.getDouble("total_amount"));
+                }
             }
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
         return order;
     }
@@ -55,6 +60,8 @@ public class OrderDao implements IOrderDao {
                 orders.add(new Order(rs.getInt("order_id"), rs.getInt("user_id"), rs.getString("order_date"),
                         rs.getString("status"), rs.getDouble("total_amount")));
             }
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
         return orders;
     }
@@ -68,6 +75,8 @@ public class OrderDao implements IOrderDao {
             stmt.setDouble(4, order.getTotalAmount());
             stmt.setInt(5, order.getOrderId());
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
     }
 
@@ -76,6 +85,8 @@ public class OrderDao implements IOrderDao {
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(DELETE_ORDER)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
     }
 
@@ -84,6 +95,8 @@ public class OrderDao implements IOrderDao {
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(DELETE_ORDERS_BY_USER_ID)) {
             stmt.setInt(1, userId);
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
     }
 

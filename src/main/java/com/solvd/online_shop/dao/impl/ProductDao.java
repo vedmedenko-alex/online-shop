@@ -19,7 +19,7 @@ public class ProductDao implements IProductDao {
     private static final String GET_ALL_PRODUCTS = "SELECT * FROM Products";
     private static final String UPDATE_PRODUCT = "UPDATE Products SET category_id = ?, name = ?, description = ?, price = ?, stock_quantity = ? WHERE product_id = ?";
     private static final String DELETE_PRODUCT = "DELETE FROM Products WHERE product_id = ?";
-    ConnectionPool pool = ConnectionPool.getInstance();
+    private final ConnectionPool pool = ConnectionPool.getInstance();
 
     @Override
     public void add(Product product) throws SQLException {
@@ -30,6 +30,8 @@ public class ProductDao implements IProductDao {
             stmt.setDouble(4, product.getPrice());
             stmt.setInt(5, product.getStockQuantity());
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
     }
 
@@ -38,11 +40,14 @@ public class ProductDao implements IProductDao {
         Product product = null;
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(GET_PRODUCT_BY_ID)) {
             stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                product = new Product(rs.getInt("product_id"), rs.getInt("category_id"), rs.getString("name"),
-                        rs.getString("description"), rs.getDouble("price"), rs.getInt("stock_quantity"));
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    product = new Product(rs.getInt("product_id"), rs.getInt("category_id"), rs.getString("name"),
+                            rs.getString("description"), rs.getDouble("price"), rs.getInt("stock_quantity"));
+                }
             }
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
         return product;
     }
@@ -55,6 +60,8 @@ public class ProductDao implements IProductDao {
                 products.add(new Product(rs.getInt("product_id"), rs.getInt("category_id"), rs.getString("name"),
                         rs.getString("description"), rs.getDouble("price"), rs.getInt("stock_quantity")));
             }
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
         return products;
     }
@@ -69,6 +76,8 @@ public class ProductDao implements IProductDao {
             stmt.setInt(5, product.getStockQuantity());
             stmt.setInt(6, product.getProductId());
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
     }
 
@@ -77,6 +86,8 @@ public class ProductDao implements IProductDao {
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(DELETE_PRODUCT)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
     }
 }

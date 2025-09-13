@@ -12,7 +12,7 @@ import com.solvd.online_shop.connection.ConnectionPool;
 import com.solvd.online_shop.dao.interfaces.ICategoryDao;
 import com.solvd.online_shop.models.Category;
 
-public class CategoryDao implements ICategoryDao{
+public class CategoryDao implements ICategoryDao {
 
     private static final String INSERT_CATEGORY = "INSERT INTO Categories (name, description) VALUES (?, ?)";
     private static final String GET_CATEGORY_BY_ID = "SELECT * FROM Categories WHERE category_id = ?";
@@ -20,27 +20,35 @@ public class CategoryDao implements ICategoryDao{
     private static final String UPDATE_CATEGORY = "UPDATE Categories SET name = ?, description = ? WHERE category_id = ?";
     private static final String DELETE_CATEGORY = "DELETE FROM Categories WHERE category_id = ?";
 
-    ConnectionPool pool = ConnectionPool.getInstance();
+    private final ConnectionPool pool = ConnectionPool.getInstance();
+
     @Override
     public void add(Category category) throws SQLException {
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(INSERT_CATEGORY)) {
             stmt.setString(1, category.getName());
             stmt.setString(2, category.getDescription());
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
     }
+
     @Override
     public Category getById(int id) throws SQLException {
         Category category = null;
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(GET_CATEGORY_BY_ID)) {
             stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                category = new Category(rs.getInt("category_id"), rs.getString("name"), rs.getString("description"));
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    category = new Category(rs.getInt("category_id"), rs.getString("name"), rs.getString("description"));
+                }
             }
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
         return category;
     }
+
     @Override
     public List<Category> getAll() throws SQLException {
         List<Category> categories = new ArrayList<>();
@@ -49,9 +57,12 @@ public class CategoryDao implements ICategoryDao{
                 categories
                         .add(new Category(rs.getInt("category_id"), rs.getString("name"), rs.getString("description")));
             }
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
         return categories;
     }
+
     @Override
     public void update(Category category) throws SQLException {
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(UPDATE_CATEGORY)) {
@@ -59,13 +70,18 @@ public class CategoryDao implements ICategoryDao{
             stmt.setString(2, category.getDescription());
             stmt.setInt(3, category.getCategoryId());
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
     }
+
     @Override
     public void delete(int id) throws SQLException {
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(DELETE_CATEGORY)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
     }
 }

@@ -20,21 +20,24 @@ public class UserDao implements IUserDao {
     private static final String UPDATE_USER = "UPDATE Users SET name = ?, email = ?, password = ? WHERE user_id = ?";
     private static final String DELETE_USER = "DELETE FROM Users WHERE user_id = ?";
     private static final String GET_USER_BY_EMAIL = "SELECT * FROM Users WHERE email = ?";
-    ConnectionPool pool = ConnectionPool.getInstance();
+    private final ConnectionPool pool = ConnectionPool.getInstance();
 
     @Override
     public User getUserByEmail(String email) throws SQLException {
         User user = null;
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(GET_USER_BY_EMAIL)) {
             stmt.setString(1, email);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                user = new User(
-                        rs.getInt("user_id"),
-                        rs.getString("name"),
-                        rs.getString("email"),
-                        rs.getString("password"));
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    user = new User(
+                            rs.getInt("user_id"),
+                            rs.getString("name"),
+                            rs.getString("email"),
+                            rs.getString("password"));
+                }
             }
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
         return user;
     }
@@ -46,6 +49,8 @@ public class UserDao implements IUserDao {
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getPassword());
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
     }
 
@@ -54,11 +59,14 @@ public class UserDao implements IUserDao {
         User user = null;
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(GET_USER_BY_ID)) {
             stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                user = new User(rs.getInt("user_id"), rs.getString("name"), rs.getString("email"),
-                        rs.getString("password"));
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    user = new User(rs.getInt("user_id"), rs.getString("name"), rs.getString("email"),
+                            rs.getString("password"));
+                }
             }
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
         return user;
     }
@@ -71,6 +79,8 @@ public class UserDao implements IUserDao {
                 users.add(new User(rs.getInt("user_id"), rs.getString("name"), rs.getString("email"),
                         rs.getString("password")));
             }
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
         return users;
     }
@@ -83,6 +93,8 @@ public class UserDao implements IUserDao {
             stmt.setString(3, user.getPassword());
             stmt.setInt(4, user.getUserId());
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
     }
 
@@ -91,6 +103,8 @@ public class UserDao implements IUserDao {
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(DELETE_USER)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
     }
 }
