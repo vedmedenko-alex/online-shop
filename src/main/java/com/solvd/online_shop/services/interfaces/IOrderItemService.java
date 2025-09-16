@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IOrderItemService {
 
-    void addOrderItem(Order order, Product product) throws SQLException;
+    void addOrderItem(Order order, Product product);
 
     // List<Product> getProductsInOrder(int orderId) throws SQLException;
 }

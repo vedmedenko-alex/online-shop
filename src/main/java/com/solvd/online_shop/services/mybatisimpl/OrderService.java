@@ -34,27 +34,27 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public void add(Order order) throws SQLException {
+    public void add(Order order)  {
         orderDao.add(order);
     }
 
     @Override
-    public Order getById(int id) throws SQLException {
+    public Order getById(int id)  {
         return orderDao.getById(id);
     }
 
     @Override
-    public List<Order> getAll() throws SQLException {
+    public List<Order> getAll()  {
         return orderDao.getAll();
     }
 
     @Override
-    public void update(Order order) throws SQLException {
+    public void update(Order order)  {
         orderDao.update(order);
     }
 
     @Override
-    public void delete(int id) throws SQLException {
+    public void delete(int id)  {
         orderDao.delete(id);
     }
 }

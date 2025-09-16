@@ -7,12 +7,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.solvd.online_shop.connection.ConnectionPool;
 import com.solvd.online_shop.dao.interfaces.IOrderDao;
 import com.solvd.online_shop.models.Order;
 
 public class OrderDao implements IOrderDao {
+    private static final Logger logger = Logger.getLogger(OrderDao.class.getName());
 
     private static final String INSERT_ORDER = "INSERT INTO Orders (user_id, order_date, status, total_amount) VALUES (?, ?, ?, ?)";
     private static final String GET_ORDER_BY_ID = "SELECT * FROM Orders WHERE order_id = ?";
@@ -23,7 +26,7 @@ public class OrderDao implements IOrderDao {
     private final ConnectionPool pool = ConnectionPool.getInstance();
 
     @Override
-    public void add(Order order) throws SQLException {
+    public void add(Order order) {
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(INSERT_ORDER)) {
             stmt.setInt(1, order.getUserId());
             stmt.setString(2, order.getOrderDate());
@@ -31,12 +34,13 @@ public class OrderDao implements IOrderDao {
             stmt.setDouble(4, order.getTotalAmount());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLException(e);
+            logger.log(Level.SEVERE, "Error adding order by ID: " + order, e);
+            throw new RuntimeException("Database error while adding order ", e);
         }
     }
 
     @Override
-    public Order getById(int id) throws SQLException {
+    public Order getById(int id) {
         Order order = null;
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(GET_ORDER_BY_ID)) {
             stmt.setInt(1, id);
@@ -47,13 +51,14 @@ public class OrderDao implements IOrderDao {
                 }
             }
         } catch (SQLException e) {
-            throw new SQLException(e);
+            logger.log(Level.SEVERE, "Error fetching order by ID: " + id, e);
+            throw new RuntimeException("Database error while fetching order by ID", e);
         }
         return order;
     }
 
     @Override
-    public List<Order> getAll() throws SQLException {
+    public List<Order> getAll()  {
         List<Order> orders = new ArrayList<>();
         try (Connection conn = pool.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(GET_ALL_ORDERS)) {
             while (rs.next()) {
@@ -61,13 +66,14 @@ public class OrderDao implements IOrderDao {
                         rs.getString("status"), rs.getDouble("total_amount")));
             }
         } catch (SQLException e) {
-            throw new SQLException(e);
+            logger.log(Level.SEVERE, "Error fetching all orders", e);
+            throw new RuntimeException("Database error while fetching all orders", e);
         }
         return orders;
     }
 
     @Override
-    public void update(Order order) throws SQLException {
+    public void update(Order order) {
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(UPDATE_ORDER)) {
             stmt.setInt(1, order.getUserId());
             stmt.setString(2, order.getOrderDate());
@@ -76,27 +82,30 @@ public class OrderDao implements IOrderDao {
             stmt.setInt(5, order.getOrderId());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLException(e);
+            logger.log(Level.SEVERE, "Error updating user: " + order, e);
+            throw new RuntimeException("Database error while updating order", e);
         }
     }
 
     @Override
-    public void delete(int id) throws SQLException {
+    public void delete(int id){
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(DELETE_ORDER)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLException(e);
+            logger.log(Level.SEVERE, "Error deleting user with ID: " + id, e);
+            throw new RuntimeException("Database error while deleting user", e);
         }
     }
 
     @Override
-    public void deleteOrdersByUserId(int userId) throws SQLException {
+    public void deleteOrdersByUserId(int userId) {
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(DELETE_ORDERS_BY_USER_ID)) {
             stmt.setInt(1, userId);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLException(e);
+            logger.log(Level.SEVERE, "Error deleting order with user ID: " + userId, e);
+            throw new RuntimeException("Database error while deleting order", e);
         }
     }
 

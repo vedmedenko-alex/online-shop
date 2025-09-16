@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface IProductCategoryService {
 
-    void addProductToCategory(Product product, Category category) throws SQLException;
+    void addProductToCategory(Product product, Category category);
 
-    List<Product> getProductsByCategory(int categoryId) throws SQLException;
+    List<Product> getProductsByCategory(int categoryId);
 
-    List<Category> getAllCategories() throws SQLException;
+    List<Category> getAllCategories();
 }

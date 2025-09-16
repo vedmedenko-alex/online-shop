@@ -40,27 +40,27 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public void add(Product product) throws SQLException {
+    public void add(Product product)  {
         productDao.add(product);
     }
 
     @Override
-    public Product getById(int id) throws SQLException {
+    public Product getById(int id)  {
         return productDao.getById(id);
     }
 
     @Override
-    public List<Product> getAll() throws SQLException {
+    public List<Product> getAll()  {
         return productDao.getAll();
     }
 
     @Override
-    public void update(Product product) throws SQLException {
+    public void update(Product product)  {
         productDao.update(product);
     }
 
     @Override
-    public void delete(int id) throws SQLException {
+    public void delete(int id)  {
         orderItemDao.deleteOrderItemsByProductId(id);
         cartItemDao.deleteCartItemsByProductId(id);
         discountDao.deleteDiscountsByProductId(id);

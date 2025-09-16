@@ -31,27 +31,27 @@ public class DiscountService implements IDiscountService {
     }
 
     @Override
-    public void add(Discount discount) throws SQLException {
+    public void add(Discount discount)  {
         discountDao.add(discount);
     }
 
     @Override
-    public List<Discount> getAll() throws SQLException {
+    public List<Discount> getAll()  {
         return discountDao.getAll();
     }
 
     @Override
-    public Discount getById(int id) throws SQLException {
+    public Discount getById(int id)  {
         return discountDao.getById(id);
     }
 
     @Override
-    public void update(Discount discount) throws SQLException {
+    public void update(Discount discount)  {
         discountDao.update(discount);
     }
 
     @Override
-    public void delete(int id) throws SQLException {
+    public void delete(int id)  {
         discountDao.delete(id);
     }
 }

@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface IGenericService<T> {
 
-    void add(T entity) throws SQLException;
+    void add(T entity);
 
-    T getById(int id) throws SQLException;
+    T getById(int id);
 
-    List<T> getAll() throws SQLException;
+    List<T> getAll();
 
-    void update(T entity) throws SQLException;
+    void update(T entity);
 
-    void delete(int id) throws SQLException;
+    void delete(int id);
 }

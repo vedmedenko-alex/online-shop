@@ -34,27 +34,27 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public void add(Category category) throws SQLException {
+    public void add(Category category)  {
         categoryDao.add(category);
     }
 
     @Override
-    public Category getById(int id) throws SQLException {
+    public Category getById(int id)  {
         return categoryDao.getById(id);
     }
 
     @Override
-    public List<Category> getAll() throws SQLException {
+    public List<Category> getAll()  {
         return categoryDao.getAll();
     }
 
     @Override
-    public void update(Category category) throws SQLException {
+    public void update(Category category)  {
         categoryDao.update(category);
     }
 
     @Override
-    public void delete(int id) throws SQLException {
+    public void delete(int id)  {
         categoryDao.delete(id);
     }
 }

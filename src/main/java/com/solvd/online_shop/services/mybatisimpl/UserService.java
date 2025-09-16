@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -17,6 +18,7 @@ import com.solvd.online_shop.models.User;
 import com.solvd.online_shop.services.interfaces.IUserService;
 
 public class UserService implements IUserService {
+     private static final Logger logger = Logger.getLogger(UserService.class.getName());
 
     private final UserMyBatisDao userDao;
     private final OrderMyBatisDao orderDao;
@@ -38,32 +40,38 @@ public class UserService implements IUserService {
             throw new RuntimeException("Error building SqlSessionFactory", e);
         }
     }
-
     @Override
-    public void add(User user) throws SQLException {
-        if (userDao.getUserByEmail(user.getEmail()) != null) {
-            throw new SQLException("User with email " + user.getEmail() + " already exists.");
+    public void add(User user) {
+        try {
+            if (userDao.getUserByEmail(user.getEmail()) == null) {
+                userDao.add(user);
+            } else {
+                logger.info("User with email " + user.getEmail() + " already exists. Skipping insert.");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error while adding user: " + user.getEmail(), e);
         }
-        userDao.add(user);
     }
 
+
+
     @Override
-    public User getById(int id) throws SQLException {
+    public User getById(int id)  {
         return userDao.getById(id);
     }
 
     @Override
-    public List<User> getAll() throws SQLException {
+    public List<User> getAll()  {
         return userDao.getAll();
     }
 
     @Override
-    public void update(User user) throws SQLException {
+    public void update(User user)  {
         userDao.update(user);
     }
 
     @Override
-    public void delete(int id) throws SQLException {
+    public void delete(int id)  {
         orderDao.deleteOrdersByUserId(id);
         cartItemDao.deleteCartItemsByUserId(id);
         reviewDao.deleteReviewsByUserId(id);

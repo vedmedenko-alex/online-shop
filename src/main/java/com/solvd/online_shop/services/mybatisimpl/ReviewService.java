@@ -31,27 +31,27 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
-    public void add(Review review) throws SQLException {
+    public void add(Review review)  {
         reviewDao.add(review);
     }
 
     @Override
-    public Review getById(int id) throws SQLException {
+    public Review getById(int id)  {
         return reviewDao.getById(id);
     }
 
     @Override
-    public List<Review> getAll() throws SQLException {
+    public List<Review> getAll()  {
         return reviewDao.getAll();
     }
 
     @Override
-    public void update(Review review) throws SQLException {
+    public void update(Review review)  {
         reviewDao.update(review);
     }
 
     @Override
-    public void delete(int id) throws SQLException {
+    public void delete(int id)  {
         reviewDao.delete(id);
     }
 }

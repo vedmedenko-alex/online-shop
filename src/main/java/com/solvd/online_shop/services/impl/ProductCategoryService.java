@@ -18,17 +18,17 @@ public class ProductCategoryService implements IProductCategoryService{
         this.categoryDao = new CategoryDao();
     }
 
-    public void addProductToCategory(Product product, Category category) throws SQLException {
+    public void addProductToCategory(Product product, Category category)   {
         categoryDao.add(category);
         product.setCategoryId(category.getCategoryId());
         productDao.add(product);
     }
 
-    public List<Product> getProductsByCategory(int categoryId) throws SQLException {
+    public List<Product> getProductsByCategory(int categoryId)   {
         return productDao.getAll();
     }
 
-    public List<Category> getAllCategories() throws SQLException {
+    public List<Category> getAllCategories()   {
         return categoryDao.getAll();
     }
 }

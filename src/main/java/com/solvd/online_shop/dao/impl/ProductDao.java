@@ -7,12 +7,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.solvd.online_shop.connection.ConnectionPool;
 import com.solvd.online_shop.dao.interfaces.IProductDao;
 import com.solvd.online_shop.models.Product;
 
 public class ProductDao implements IProductDao {
+    private static final Logger logger = Logger.getLogger(ProductDao.class.getName());
 
     private static final String INSERT_PRODUCT = "INSERT INTO Products (category_id, name, description, price, stock_quantity) VALUES (?, ?, ?, ?, ?)";
     private static final String GET_PRODUCT_BY_ID = "SELECT * FROM Products WHERE product_id = ?";
@@ -22,7 +25,7 @@ public class ProductDao implements IProductDao {
     private final ConnectionPool pool = ConnectionPool.getInstance();
 
     @Override
-    public void add(Product product) throws SQLException {
+    public void add(Product product)  {
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(INSERT_PRODUCT)) {
             stmt.setInt(1, product.getCategoryId());
             stmt.setString(2, product.getName());
@@ -31,12 +34,13 @@ public class ProductDao implements IProductDao {
             stmt.setInt(5, product.getStockQuantity());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLException(e);
+            logger.log(Level.SEVERE, "Error adding product: " + product, e);
+            throw new RuntimeException("Database error while adding product", e);
         }
     }
 
     @Override
-    public Product getById(int id) throws SQLException {
+    public Product getById(int id)  {
         Product product = null;
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(GET_PRODUCT_BY_ID)) {
             stmt.setInt(1, id);
@@ -47,13 +51,14 @@ public class ProductDao implements IProductDao {
                 }
             }
         } catch (SQLException e) {
-            throw new SQLException(e);
+            logger.log(Level.SEVERE, "Error fetching product by ID: " + id, e);
+            throw new RuntimeException("Database error while fetching product by ID", e);
         }
         return product;
     }
 
     @Override
-    public List<Product> getAll() throws SQLException {
+    public List<Product> getAll()  {
         List<Product> products = new ArrayList<>();
         try (Connection conn = pool.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(GET_ALL_PRODUCTS)) {
             while (rs.next()) {
@@ -61,13 +66,14 @@ public class ProductDao implements IProductDao {
                         rs.getString("description"), rs.getDouble("price"), rs.getInt("stock_quantity")));
             }
         } catch (SQLException e) {
-            throw new SQLException(e);
+            logger.log(Level.SEVERE, "Error fetching all products", e);
+            throw new RuntimeException("Database error while fetching all products", e);
         }
         return products;
     }
 
     @Override
-    public void update(Product product) throws SQLException {
+    public void update(Product product)  {
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(UPDATE_PRODUCT)) {
             stmt.setInt(1, product.getCategoryId());
             stmt.setString(2, product.getName());
@@ -77,17 +83,19 @@ public class ProductDao implements IProductDao {
             stmt.setInt(6, product.getProductId());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLException(e);
+            logger.log(Level.SEVERE, "Error updating product: " + product, e);
+            throw new RuntimeException("Database error while updating product", e);
         }
     }
 
     @Override
-    public void delete(int id) throws SQLException {
+    public void delete(int id)  {
         try (Connection conn = pool.getConnection(); PreparedStatement stmt = conn.prepareStatement(DELETE_PRODUCT)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLException(e);
+            logger.log(Level.SEVERE, "Error deleting product with ID: " + id, e);
+            throw new RuntimeException("Database error while deleting product", e);
         }
     }
 }

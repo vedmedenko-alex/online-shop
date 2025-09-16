@@ -35,12 +35,12 @@ public class OrderItemService implements IOrderItemService {
     }
 
     @Override
-    public void addOrderItem(Order order, Product product) throws SQLException {
+    public void addOrderItem(Order order, Product product)  {
         orderDao.add(order);
         productDao.add(product);
     }
 
-    public List<Product> getAll() throws SQLException {
+    public List<Product> getAll()  {
         return productDao.getAll();
     }
 }

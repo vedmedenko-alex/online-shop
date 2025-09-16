@@ -25,30 +25,30 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void add(User user) throws SQLException {
+    public void add(User user) {
         if (userDao.getUserByEmail(user.getEmail()) != null) {
-            throw new SQLException("User with email " + user.getEmail() + " already exists.");
+            throw new RuntimeException("User with email " + user.getEmail() + " already exists.");
         }
         userDao.add(user);
     }
 
     @Override
-    public User getById(int id) throws SQLException {
+    public User getById(int id) {
         return userDao.getById(id);
     }
 
     @Override
-    public List<User> getAll() throws SQLException {
+    public List<User> getAll()  {
         return userDao.getAll();
     }
 
     @Override
-    public void update(User user) throws SQLException {
+    public void update(User user)   {
         userDao.update(user);
     }
 
     @Override
-    public void delete(int id) throws SQLException {
+    public void delete(int id)   {
         orderDao.deleteOrdersByUserId(id);
         cartItemDao.deleteCartItemsByUserId(id);
         reviewDao.deleteReviewsByUserId(id);
