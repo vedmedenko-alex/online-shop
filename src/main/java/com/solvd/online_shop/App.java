@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.solvd.online_shop.factories.ServiceFactory;
 import com.solvd.online_shop.models.*;
 import com.solvd.online_shop.services.impl.CartService; // JSON parser
 // import com.solvd.online_shop.services.impl.CategoryService;
@@ -12,14 +13,21 @@ import com.solvd.online_shop.services.impl.CartService; // JSON parser
 // import com.solvd.online_shop.services.impl.ProductService;
 // import com.solvd.online_shop.services.impl.ReviewService;
 // import com.solvd.online_shop.services.impl.UserService;
-import com.solvd.online_shop.services.mybatisimpl.CategoryService;
-import com.solvd.online_shop.services.mybatisimpl.DiscountService;
-import com.solvd.online_shop.services.mybatisimpl.OrderService;
-import com.solvd.online_shop.services.mybatisimpl.ProductService;
-import com.solvd.online_shop.services.mybatisimpl.ReviewService;
-import com.solvd.online_shop.services.mybatisimpl.UserService;
+// import com.solvd.online_shop.services.mybatisimpl.CategoryService;
+// import com.solvd.online_shop.services.mybatisimpl.DiscountService;
+// import com.solvd.online_shop.services.mybatisimpl.OrderService;
+// import com.solvd.online_shop.services.mybatisimpl.ProductService;
+// import com.solvd.online_shop.services.mybatisimpl.ReviewService;
+// import com.solvd.online_shop.services.mybatisimpl.UserService;
 import com.solvd.online_shop.services.impl.SupplierService; // XML parser
 import com.solvd.online_shop.services.impl.XmlService;
+import com.solvd.online_shop.services.interfaces.IUserService;
+import com.solvd.online_shop.services.interfaces.IProductService;
+import com.solvd.online_shop.services.interfaces.IOrderService;
+import com.solvd.online_shop.services.interfaces.ICategoryService;
+import com.solvd.online_shop.services.interfaces.IReviewService;
+import com.solvd.online_shop.services.interfaces.IDiscountService;
+
 
 public class App {
 
@@ -27,12 +35,14 @@ public class App {
 
     public static void main(String[] args) {
 
-        UserService userService = new UserService();
-        ProductService productService = new ProductService();
-        OrderService orderService = new OrderService();
-        CategoryService categoryService = new CategoryService();
-        ReviewService reviewService = new ReviewService();
-        DiscountService discountService = new DiscountService();
+        ServiceFactory factory = new ServiceFactory(ServiceFactory.Implementation.MYBATIS);
+
+        IUserService userService = factory.createUserService();
+        IProductService productService = factory.createProductService();
+        IOrderService orderService = factory.createOrderService();
+        ICategoryService categoryService = factory.createCategoryService();
+        IReviewService reviewService = factory.createReviewService();
+        IDiscountService discountService = factory.createDiscountService();
 
         logger.info("---- Testing UserService ----");
         try {
@@ -50,8 +60,8 @@ public class App {
             userService.update(retrievedUser);
             logger.log(Level.INFO, "Updated User: {0}", retrievedUser.getName());
 
-            userService.delete(1);
-            logger.info("Deleted User with ID: 1");
+            // userService.delete(1);
+            // logger.info("Deleted User with ID: 1");
 
         } catch (RuntimeException e) {
             logger.log(Level.SEVERE, "UserService error", e);
@@ -140,8 +150,8 @@ public class App {
                 logger.warning("Review with ID 1 not found.");
             }
 
-            reviewService.delete(1);
-            logger.info("Deleted Review with ID: 1");
+            // reviewService.delete(1);
+            // logger.info("Deleted Review with ID: 1");
 
         } catch (RuntimeException e) {
             logger.log(Level.SEVERE, "ReviewService error", e);
@@ -158,8 +168,8 @@ public class App {
             List<Discount> discounts = discountService.getAll();
             logger.log(Level.INFO, "All Discounts: {0}", discounts);
 
-            discountService.delete(1);
-            logger.info("Deleted Discount with ID: 1");
+            // discountService.delete(1);
+            // logger.info("Deleted Discount with ID: 1");
 
         } catch (RuntimeException e) {
             logger.log(Level.SEVERE, "DiscountService error", e);
